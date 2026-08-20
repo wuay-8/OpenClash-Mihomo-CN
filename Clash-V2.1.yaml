@@ -1,11 +1,6 @@
 # ============================================================
-# OpenClash + Mihomo 中国大陆融合版 V2.1（无自动测速分组）
+# OpenClash + Mihomo 中国大陆融合版 V2.1（无自动测速分组 / 兼容缩进版）
 # 使用前只需要修改 Airport 的 url
-# 说明：
-#   - 已移除 ♻️ 自动选择
-#   - 已移除 HK / JP / US / SG / TW Auto
-#   - 地区组全部改为手动选择
-#   - 保留 Airport health-check，仅用于节点可用性检测
 # ============================================================
 
 mixed-port: 7890
@@ -31,19 +26,19 @@ sniffer:
   sniff:
     HTTP:
       ports:
-      - 80
-      - 8080-8880
+        - 80
+        - 8080-8880
       override-destination: true
     TLS:
       ports:
-      - 443
-      - 8443
+        - 443
+        - 8443
     QUIC:
       ports:
-      - 443
-      - 8443
+        - 443
+        - 8443
   skip-domain:
-  - +.push.apple.com
+    - +.push.apple.com
 dns:
   enable: true
   listen: 0.0.0.0:7874
@@ -54,36 +49,36 @@ dns:
   use-system-hosts: false
   respect-rules: true
   default-nameserver:
-  - 223.5.5.5
-  - 119.29.29.29
+    - 223.5.5.5
+    - 119.29.29.29
   nameserver:
-  - https://dns.alidns.com/dns-query
-  - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
   proxy-server-nameserver:
-  - https://dns.alidns.com/dns-query
-  - https://doh.pub/dns-query
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
   fake-ip-filter:
-  - '*.lan'
-  - '*.local'
-  - +.local
-  - +.home.arpa
-  - localhost.ptlogin2.qq.com
-  - time.*.com
-  - time.*.gov
-  - time.*.edu.cn
-  - time.*.apple.com
-  - ntp.*.com
-  - '*.ntp.org.cn'
-  - +.pool.ntp.org
-  - stun.*.*
-  - stun.*.*.*
-  - +.stun.*.*
-  - +.stun.*.*.*
-  - '*.msftconnecttest.com'
-  - '*.msftncsi.com'
-  - +.srv.nintendo.net
-  - +.stun.playstation.net
-  - xbox.*.microsoft.com
+    - '*.lan'
+    - '*.local'
+    - +.local
+    - +.home.arpa
+    - localhost.ptlogin2.qq.com
+    - time.*.com
+    - time.*.gov
+    - time.*.edu.cn
+    - time.*.apple.com
+    - ntp.*.com
+    - '*.ntp.org.cn'
+    - +.pool.ntp.org
+    - stun.*.*
+    - stun.*.*.*
+    - +.stun.*.*
+    - +.stun.*.*.*
+    - '*.msftconnecttest.com'
+    - '*.msftncsi.com'
+    - +.srv.nintendo.net
+    - +.stun.playstation.net
+    - xbox.*.microsoft.com
 proxy-providers:
   Airport:
     type: http
@@ -100,208 +95,208 @@ proxy-providers:
       lazy: true
       expected-status: 204
 proxy-groups:
-- name: 🚀 节点选择
-  type: select
-  proxies:
-  - 🚀 手动切换
-  - 🇭🇰 Hong Kong
-  - 🇯🇵 Japan
-  - 🇺🇸 United States
-  - 🇸🇬 Singapore
-  - 🇹🇼 Taiwan
-  - 🇰🇷 Korea
-  - 🇬🇧 United Kingdom
-  - 🇩🇪 Germany
-  - 🇫🇷 France
-  - 🌍 Other Regions
-  - DIRECT
-- name: 🚀 手动切换
-  type: select
-  use:
-  - Airport
-- name: 🔧 规则下载
-  type: select
-  proxies:
-  - 🚀 节点选择
-  - 🚀 手动切换
-- name: 🇭🇰 Hong Kong
-  type: select
-  use:
-  - Airport
-  filter: (?i)香港|港|HK|Hong.?Kong
-- name: 🇯🇵 Japan
-  type: select
-  use:
-  - Airport
-  filter: (?i)日本|日|JP|Japan|Tokyo|Osaka
-- name: 🇺🇸 United States
-  type: select
-  use:
-  - Airport
-  filter: (?i)美国|美|US|USA|United.?States|Los.?Angeles|San.?Jose
-- name: 🇸🇬 Singapore
-  type: select
-  use:
-  - Airport
-  filter: (?i)新加坡|新|SG|Singapore
-- name: 🇹🇼 Taiwan
-  type: select
-  use:
-  - Airport
-  filter: (?i)台湾|臺灣|台|TW|Taiwan
-- name: 🇰🇷 Korea
-  type: select
-  use:
-  - Airport
-  filter: (?i)韩国|韓國|韩|KR|Korea|Seoul
-- name: 🇬🇧 United Kingdom
-  type: select
-  use:
-  - Airport
-  filter: (?i)英国|英|UK|GB|United.?Kingdom|London
-- name: 🇩🇪 Germany
-  type: select
-  use:
-  - Airport
-  filter: (?i)德国|德|DE|Germany|Frankfurt
-- name: 🇫🇷 France
-  type: select
-  use:
-  - Airport
-  filter: (?i)法国|法|FR|France|Paris
-- name: 🌍 Other Regions
-  type: select
-  use:
-  - Airport
-  exclude-filter: (?i)香港|Hong.?Kong|\bHK\b|日本|Japan|\bJP\b|美国|United.?States|\bUS\b|\bUSA\b|新加坡|Singapore|\bSG\b|台湾|臺灣|Taiwan|\bTW\b|韩国|韓國|Korea|\bKR\b|英国|United.?Kingdom|\bUK\b|\bGB\b|德国|Germany|\bDE\b|法国|France|\bFR\b|流量|剩余|到期|过期|Traffic|Expire
-- name: 🌐 国际流量
-  type: select
-  proxies:
-  - 🚀 节点选择
-  - 🚀 手动切换
-  - 🇭🇰 Hong Kong
-  - 🇯🇵 Japan
-  - 🇺🇸 United States
-  - 🇸🇬 Singapore
-  - 🇹🇼 Taiwan
-  - 🇰🇷 Korea
-  - 🇬🇧 United Kingdom
-  - 🇩🇪 Germany
-  - 🇫🇷 France
-  - 🌍 Other Regions
-- name: 🎯 国内流量
-  type: select
-  proxies:
-  - DIRECT
-  - 🚀 节点选择
-- name: 🚫 广告拦截
-  type: select
-  proxies:
-  - REJECT
-  - DIRECT
-- name: 🤖 AI服务
-  type: select
-  proxies:
-  - 🇺🇸 United States
-  - 🇸🇬 Singapore
-  - 🇯🇵 Japan
-  - 🚀 节点选择
-  - 🚀 手动切换
-  - 🇬🇧 United Kingdom
-  - 🇩🇪 Germany
-  - 🇫🇷 France
-- name: 📹 YouTube
-  type: select
-  proxies:
-  - 🚀 节点选择
-  - 🇭🇰 Hong Kong
-  - 🇯🇵 Japan
-  - 🇺🇸 United States
-  - 🇸🇬 Singapore
-  - 🇹🇼 Taiwan
-- name: 🌍 国外媒体
-  type: select
-  proxies:
-  - 🚀 节点选择
-  - 🚀 手动切换
-  - 🇭🇰 Hong Kong
-  - 🇯🇵 Japan
-  - 🇺🇸 United States
-  - 🇸🇬 Singapore
-  - 🇹🇼 Taiwan
-  - 🇰🇷 Korea
-  - 🇬🇧 United Kingdom
-  - 🇩🇪 Germany
-  - 🇫🇷 France
-  - 🌍 Other Regions
-  - DIRECT
-- name: ✈️ Telegram
-  type: select
-  proxies:
-  - 🇸🇬 Singapore
-  - 🇭🇰 Hong Kong
-  - 🇯🇵 Japan
-  - 🇺🇸 United States
-  - 🚀 节点选择
-- name: 🔍 谷歌服务
-  type: select
-  proxies:
-  - 🚀 节点选择
-  - 🇭🇰 Hong Kong
-  - 🇯🇵 Japan
-  - 🇺🇸 United States
-  - 🇸🇬 Singapore
-  - 🇹🇼 Taiwan
-- name: 📧 Google FCM
-  type: select
-  proxies:
-  - 🚀 节点选择
-  - DIRECT
-  - 🇭🇰 Hong Kong
-  - 🇯🇵 Japan
-  - 🇺🇸 United States
-  - 🇸🇬 Singapore
-- name: Ⓜ️ Microsoft
-  type: select
-  proxies:
-  - DIRECT
-  - 🚀 节点选择
-  - 🇭🇰 Hong Kong
-  - 🇯🇵 Japan
-  - 🇺🇸 United States
-  - 🇸🇬 Singapore
-- name: 🍎 Apple服务
-  type: select
-  proxies:
-  - DIRECT
-  - 🚀 节点选择
-  - 🇭🇰 Hong Kong
-  - 🇯🇵 Japan
-  - 🇺🇸 United States
-  - 🇸🇬 Singapore
-  - 🇹🇼 Taiwan
-- name: 💳 PayPal
-  type: select
-  proxies:
-  - 🇺🇸 United States
-  - 🚀 节点选择
-  - 🇭🇰 Hong Kong
-  - 🇸🇬 Singapore
-  - DIRECT
-- name: 🎮 Steam
-  type: select
-  proxies:
-  - DIRECT
-  - 🚀 节点选择
-  - 🇭🇰 Hong Kong
-  - 🇯🇵 Japan
-  - 🇸🇬 Singapore
-  - 🇺🇸 United States
-- name: 🫧 WeChat
-  type: select
-  proxies:
-  - DIRECT
-  - 🚀 节点选择
+  - name: 🚀 节点选择
+    type: select
+    proxies:
+      - 🚀 手动切换
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+      - 🇹🇼 Taiwan
+      - 🇰🇷 Korea
+      - 🇬🇧 United Kingdom
+      - 🇩🇪 Germany
+      - 🇫🇷 France
+      - 🌍 Other Regions
+      - DIRECT
+  - name: 🚀 手动切换
+    type: select
+    use:
+      - Airport
+  - name: 🔧 规则下载
+    type: select
+    proxies:
+      - 🚀 节点选择
+      - 🚀 手动切换
+  - name: 🇭🇰 Hong Kong
+    type: select
+    use:
+      - Airport
+    filter: (?i)香港|港|HK|Hong.?Kong
+  - name: 🇯🇵 Japan
+    type: select
+    use:
+      - Airport
+    filter: (?i)日本|日|JP|Japan|Tokyo|Osaka
+  - name: 🇺🇸 United States
+    type: select
+    use:
+      - Airport
+    filter: (?i)美国|美|US|USA|United.?States|Los.?Angeles|San.?Jose
+  - name: 🇸🇬 Singapore
+    type: select
+    use:
+      - Airport
+    filter: (?i)新加坡|新|SG|Singapore
+  - name: 🇹🇼 Taiwan
+    type: select
+    use:
+      - Airport
+    filter: (?i)台湾|臺灣|台|TW|Taiwan
+  - name: 🇰🇷 Korea
+    type: select
+    use:
+      - Airport
+    filter: (?i)韩国|韓國|韩|KR|Korea|Seoul
+  - name: 🇬🇧 United Kingdom
+    type: select
+    use:
+      - Airport
+    filter: (?i)英国|英|UK|GB|United.?Kingdom|London
+  - name: 🇩🇪 Germany
+    type: select
+    use:
+      - Airport
+    filter: (?i)德国|德|DE|Germany|Frankfurt
+  - name: 🇫🇷 France
+    type: select
+    use:
+      - Airport
+    filter: (?i)法国|法|FR|France|Paris
+  - name: 🌍 Other Regions
+    type: select
+    use:
+      - Airport
+    exclude-filter: (?i)香港|Hong.?Kong|\bHK\b|日本|Japan|\bJP\b|美国|United.?States|\bUS\b|\bUSA\b|新加坡|Singapore|\bSG\b|台湾|臺灣|Taiwan|\bTW\b|韩国|韓國|Korea|\bKR\b|英国|United.?Kingdom|\bUK\b|\bGB\b|德国|Germany|\bDE\b|法国|France|\bFR\b|流量|剩余|到期|过期|Traffic|Expire
+  - name: 🌐 国际流量
+    type: select
+    proxies:
+      - 🚀 节点选择
+      - 🚀 手动切换
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+      - 🇹🇼 Taiwan
+      - 🇰🇷 Korea
+      - 🇬🇧 United Kingdom
+      - 🇩🇪 Germany
+      - 🇫🇷 France
+      - 🌍 Other Regions
+  - name: 🎯 国内流量
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 节点选择
+  - name: 🚫 广告拦截
+    type: select
+    proxies:
+      - REJECT
+      - DIRECT
+  - name: 🤖 AI服务
+    type: select
+    proxies:
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+      - 🇯🇵 Japan
+      - 🚀 节点选择
+      - 🚀 手动切换
+      - 🇬🇧 United Kingdom
+      - 🇩🇪 Germany
+      - 🇫🇷 France
+  - name: 📹 YouTube
+    type: select
+    proxies:
+      - 🚀 节点选择
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+      - 🇹🇼 Taiwan
+  - name: 🌍 国外媒体
+    type: select
+    proxies:
+      - 🚀 节点选择
+      - 🚀 手动切换
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+      - 🇹🇼 Taiwan
+      - 🇰🇷 Korea
+      - 🇬🇧 United Kingdom
+      - 🇩🇪 Germany
+      - 🇫🇷 France
+      - 🌍 Other Regions
+      - DIRECT
+  - name: ✈️ Telegram
+    type: select
+    proxies:
+      - 🇸🇬 Singapore
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🚀 节点选择
+  - name: 🔍 谷歌服务
+    type: select
+    proxies:
+      - 🚀 节点选择
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+      - 🇹🇼 Taiwan
+  - name: 📧 Google FCM
+    type: select
+    proxies:
+      - 🚀 节点选择
+      - DIRECT
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+  - name: Ⓜ️ Microsoft
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 节点选择
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+  - name: 🍎 Apple服务
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 节点选择
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+      - 🇹🇼 Taiwan
+  - name: 💳 PayPal
+    type: select
+    proxies:
+      - 🇺🇸 United States
+      - 🚀 节点选择
+      - 🇭🇰 Hong Kong
+      - 🇸🇬 Singapore
+      - DIRECT
+  - name: 🎮 Steam
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 节点选择
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇸🇬 Singapore
+      - 🇺🇸 United States
+  - name: 🫧 WeChat
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 节点选择
 rule-providers:
   AdBlock:
     type: http
@@ -458,35 +453,35 @@ rule-providers:
     interval: 86400
     proxy: 🔧 规则下载
 rules:
-- IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
-- IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
-- IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
-- IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
-- IP-CIDR,100.64.0.0/10,DIRECT,no-resolve
-- RULE-SET,AdBlock,🚫 广告拦截
-- DOMAIN-SUFFIX,claude.ai,🤖 AI服务
-- DOMAIN-SUFFIX,anthropic.com,🤖 AI服务
-- DOMAIN-SUFFIX,perplexity.ai,🤖 AI服务
-- DOMAIN,gemini.google.com,🤖 AI服务
-- RULE-SET,AI,🤖 AI服务
-- RULE-SET,YouTube,📹 YouTube
-- RULE-SET,Netflix,🌍 国外媒体
-- RULE-SET,Disney,🌍 国外媒体
-- RULE-SET,Max,🌍 国外媒体
-- RULE-SET,Spotify,🌍 国外媒体
-- RULE-SET,Bahamut,🌍 国外媒体
-- RULE-SET,Bilibili,🎯 国内流量
-- RULE-SET,Telegram,✈️ Telegram
-- RULE-SET,GoogleFCM,📧 Google FCM
-- RULE-SET,Google,🔍 谷歌服务
-- RULE-SET,Microsoft,Ⓜ️ Microsoft
-- RULE-SET,Apple,🍎 Apple服务
-- RULE-SET,PayPal,💳 PayPal
-- RULE-SET,Steam,🎮 Steam
-- RULE-SET,TikTok,🌐 国际流量
-- DOMAIN-SUFFIX,wechat.com,🫧 WeChat
-- DOMAIN-SUFFIX,weixin.qq.com,🫧 WeChat
-- RULE-SET,CN,🎯 国内流量
-- RULE-SET,CN_IP,🎯 国内流量,no-resolve
-- RULE-SET,Proxy,🌐 国际流量
-- MATCH,🌐 国际流量
+  - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+  - IP-CIDR,100.64.0.0/10,DIRECT,no-resolve
+  - RULE-SET,AdBlock,🚫 广告拦截
+  - DOMAIN-SUFFIX,claude.ai,🤖 AI服务
+  - DOMAIN-SUFFIX,anthropic.com,🤖 AI服务
+  - DOMAIN-SUFFIX,perplexity.ai,🤖 AI服务
+  - DOMAIN,gemini.google.com,🤖 AI服务
+  - RULE-SET,AI,🤖 AI服务
+  - RULE-SET,YouTube,📹 YouTube
+  - RULE-SET,Netflix,🌍 国外媒体
+  - RULE-SET,Disney,🌍 国外媒体
+  - RULE-SET,Max,🌍 国外媒体
+  - RULE-SET,Spotify,🌍 国外媒体
+  - RULE-SET,Bahamut,🌍 国外媒体
+  - RULE-SET,Bilibili,🎯 国内流量
+  - RULE-SET,Telegram,✈️ Telegram
+  - RULE-SET,GoogleFCM,📧 Google FCM
+  - RULE-SET,Google,🔍 谷歌服务
+  - RULE-SET,Microsoft,Ⓜ️ Microsoft
+  - RULE-SET,Apple,🍎 Apple服务
+  - RULE-SET,PayPal,💳 PayPal
+  - RULE-SET,Steam,🎮 Steam
+  - RULE-SET,TikTok,🌐 国际流量
+  - DOMAIN-SUFFIX,wechat.com,🫧 WeChat
+  - DOMAIN-SUFFIX,weixin.qq.com,🫧 WeChat
+  - RULE-SET,CN,🎯 国内流量
+  - RULE-SET,CN_IP,🎯 国内流量,no-resolve
+  - RULE-SET,Proxy,🌐 国际流量
+  - MATCH,🌐 国际流量
