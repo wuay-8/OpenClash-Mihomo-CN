@@ -1,0 +1,596 @@
+# ============================================================
+# OpenClash + Mihomo 中国大陆融合版 V2（2026）
+# 使用前只需要修改 Airport 的 url
+# ============================================================
+
+mixed-port: 7890
+allow-lan: true
+bind-address: "*"
+mode: rule
+log-level: warning
+ipv6: false
+unified-delay: true
+tcp-concurrent: true
+find-process-mode: "off"
+external-controller: 0.0.0.0:9090
+secret: ""
+
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+geo-auto-update: false
+
+sniffer:
+  enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
+  override-destination: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+  skip-domain:
+    - "+.push.apple.com"
+
+dns:
+  enable: true
+  listen: 0.0.0.0:7874
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  use-hosts: true
+  use-system-hosts: false
+  respect-rules: true
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  proxy-server-nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  fake-ip-filter:
+    - "*.lan"
+    - "*.local"
+    - "+.local"
+    - "+.home.arpa"
+    - "localhost.ptlogin2.qq.com"
+    - "time.*.com"
+    - "time.*.gov"
+    - "time.*.edu.cn"
+    - "time.*.apple.com"
+    - "ntp.*.com"
+    - "*.ntp.org.cn"
+    - "+.pool.ntp.org"
+    - "stun.*.*"
+    - "stun.*.*.*"
+    - "+.stun.*.*"
+    - "+.stun.*.*.*"
+    - "*.msftconnecttest.com"
+    - "*.msftncsi.com"
+    - "+.srv.nintendo.net"
+    - "+.stun.playstation.net"
+    - "xbox.*.microsoft.com"
+
+proxy-providers:
+  Airport:
+    type: http
+    url: "https://example.com/YOUR_SUBSCRIPTION_URL"
+    path: ./proxy_providers/Airport.yaml
+    interval: 21600
+    proxy: DIRECT
+    exclude-filter: "(?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置"
+    health-check:
+      enable: true
+      url: https://www.gstatic.com/generate_204
+      interval: 600
+      timeout: 5000
+      lazy: true
+      expected-status: 204
+
+proxy-groups:
+  - name: 🚀 节点选择
+    type: select
+    proxies:
+      - ♻️ 自动选择
+      - 🚀 手动切换
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+      - 🇹🇼 Taiwan
+      - 🇰🇷 Korea
+      - 🇬🇧 United Kingdom
+      - 🇩🇪 Germany
+      - 🇫🇷 France
+      - 🌍 Other Regions
+      - DIRECT
+
+  - name: 🚀 手动切换
+    type: select
+    use: [Airport]
+
+  - name: ♻️ 自动选择
+    type: url-test
+    use: [Airport]
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 80
+    lazy: true
+    exclude-filter: "(?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置"
+
+  - name: 🔧 规则下载
+    type: select
+    proxies:
+      - ♻️ 自动选择
+      - 🚀 节点选择
+      - 🚀 手动切换
+
+  - name: 🇭🇰 Hong Kong
+    type: select
+    proxies: [🇭🇰 HK Auto]
+    use: [Airport]
+    filter: "(?i)香港|港|HK|Hong.?Kong"
+
+  - name: 🇭🇰 HK Auto
+    type: url-test
+    use: [Airport]
+    filter: "(?i)香港|港|HK|Hong.?Kong"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    lazy: true
+
+  - name: 🇯🇵 Japan
+    type: select
+    proxies: [🇯🇵 JP Auto]
+    use: [Airport]
+    filter: "(?i)日本|日|JP|Japan|Tokyo|Osaka"
+
+  - name: 🇯🇵 JP Auto
+    type: url-test
+    use: [Airport]
+    filter: "(?i)日本|日|JP|Japan|Tokyo|Osaka"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    lazy: true
+
+  - name: 🇺🇸 United States
+    type: select
+    proxies: [🇺🇸 US Auto]
+    use: [Airport]
+    filter: "(?i)美国|美|US|USA|United.?States|Los.?Angeles|San.?Jose"
+
+  - name: 🇺🇸 US Auto
+    type: url-test
+    use: [Airport]
+    filter: "(?i)美国|美|US|USA|United.?States|Los.?Angeles|San.?Jose"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 80
+    lazy: true
+
+  - name: 🇸🇬 Singapore
+    type: select
+    proxies: [🇸🇬 SG Auto]
+    use: [Airport]
+    filter: "(?i)新加坡|新|SG|Singapore"
+
+  - name: 🇸🇬 SG Auto
+    type: url-test
+    use: [Airport]
+    filter: "(?i)新加坡|新|SG|Singapore"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    lazy: true
+
+  - name: 🇹🇼 Taiwan
+    type: select
+    proxies: [🇹🇼 TW Auto]
+    use: [Airport]
+    filter: "(?i)台湾|臺灣|台|TW|Taiwan"
+
+  - name: 🇹🇼 TW Auto
+    type: url-test
+    use: [Airport]
+    filter: "(?i)台湾|臺灣|台|TW|Taiwan"
+    url: https://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    lazy: true
+
+  - name: 🇰🇷 Korea
+    type: select
+    use: [Airport]
+    filter: "(?i)韩国|韓國|韩|KR|Korea|Seoul"
+
+  - name: 🇬🇧 United Kingdom
+    type: select
+    use: [Airport]
+    filter: "(?i)英国|英|UK|GB|United.?Kingdom|London"
+
+  - name: 🇩🇪 Germany
+    type: select
+    use: [Airport]
+    filter: "(?i)德国|德|DE|Germany|Frankfurt"
+
+  - name: 🇫🇷 France
+    type: select
+    use: [Airport]
+    filter: "(?i)法国|法|FR|France|Paris"
+
+  - name: 🌍 Other Regions
+    type: select
+    use: [Airport]
+    exclude-filter: "(?i)香港|Hong.?Kong|\\bHK\\b|日本|Japan|\\bJP\\b|美国|United.?States|\\bUS\\b|\\bUSA\\b|新加坡|Singapore|\\bSG\\b|台湾|臺灣|Taiwan|\\bTW\\b|韩国|韓國|Korea|\\bKR\\b|英国|United.?Kingdom|\\bUK\\b|\\bGB\\b|德国|Germany|\\bDE\\b|法国|France|\\bFR\\b|流量|剩余|到期|过期|Traffic|Expire"
+
+  - name: 🌐 国际流量
+    type: select
+    proxies:
+      - 🚀 节点选择
+      - ♻️ 自动选择
+      - 🚀 手动切换
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+      - 🇹🇼 Taiwan
+      - 🇰🇷 Korea
+      - 🇬🇧 United Kingdom
+      - 🇩🇪 Germany
+      - 🇫🇷 France
+      - 🌍 Other Regions
+
+  - name: 🎯 国内流量
+    type: select
+    proxies: [DIRECT, 🚀 节点选择]
+
+  - name: 🚫 广告拦截
+    type: select
+    proxies: [REJECT, DIRECT]
+
+  - name: 🤖 AI服务
+    type: select
+    proxies:
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+      - 🇯🇵 Japan
+      - 🚀 节点选择
+      - ♻️ 自动选择
+      - 🚀 手动切换
+      - 🇬🇧 United Kingdom
+      - 🇩🇪 Germany
+      - 🇫🇷 France
+
+  - name: 📹 YouTube
+    type: select
+    proxies:
+      - 🚀 节点选择
+      - ♻️ 自动选择
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+      - 🇹🇼 Taiwan
+
+  - name: 🌍 国外媒体
+    type: select
+    proxies:
+      - 🚀 节点选择
+      - ♻️ 自动选择
+      - 🚀 手动切换
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+      - 🇹🇼 Taiwan
+      - 🇰🇷 Korea
+      - 🇬🇧 United Kingdom
+      - 🇩🇪 Germany
+      - 🇫🇷 France
+      - 🌍 Other Regions
+      - DIRECT
+
+  - name: ✈️ Telegram
+    type: select
+    proxies:
+      - 🇸🇬 Singapore
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🚀 节点选择
+      - ♻️ 自动选择
+
+  - name: 🔍 谷歌服务
+    type: select
+    proxies:
+      - 🚀 节点选择
+      - ♻️ 自动选择
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+      - 🇹🇼 Taiwan
+
+  - name: 📧 Google FCM
+    type: select
+    proxies:
+      - 🚀 节点选择
+      - ♻️ 自动选择
+      - DIRECT
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+
+  - name: Ⓜ️ Microsoft
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 节点选择
+      - ♻️ 自动选择
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+
+  - name: 🍎 Apple服务
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 节点选择
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇺🇸 United States
+      - 🇸🇬 Singapore
+      - 🇹🇼 Taiwan
+
+  - name: 💳 PayPal
+    type: select
+    proxies:
+      - 🇺🇸 United States
+      - 🚀 节点选择
+      - 🇭🇰 Hong Kong
+      - 🇸🇬 Singapore
+      - DIRECT
+
+  - name: 🎮 Steam
+    type: select
+    proxies:
+      - DIRECT
+      - 🚀 节点选择
+      - ♻️ 自动选择
+      - 🇭🇰 Hong Kong
+      - 🇯🇵 Japan
+      - 🇸🇬 Singapore
+      - 🇺🇸 United States
+
+  - name: 🫧 WeChat
+    type: select
+    proxies: [DIRECT, 🚀 节点选择]
+
+rule-providers:
+  AdBlock:
+    type: http
+    behavior: classical
+    url: "https://testingcf.jsdelivr.net/gh/dler-io/Rules@main/Clash/Provider/AdBlock.yaml"
+    path: ./rule_providers/adblock.yaml
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  AI:
+    type: http
+    behavior: domain
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/openai.mrs"
+    path: ./rule_providers/ai_openai.mrs
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  YouTube:
+    type: http
+    behavior: domain
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/youtube.mrs"
+    path: ./rule_providers/youtube.mrs
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  Netflix:
+    type: http
+    behavior: domain
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"
+    path: ./rule_providers/netflix.mrs
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  Spotify:
+    type: http
+    behavior: domain
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.mrs"
+    path: ./rule_providers/spotify.mrs
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  Telegram:
+    type: http
+    behavior: domain
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"
+    path: ./rule_providers/telegram.mrs
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  Google:
+    type: http
+    behavior: domain
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"
+    path: ./rule_providers/google.mrs
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  GoogleFCM:
+    type: http
+    behavior: classical
+    url: "https://testingcf.jsdelivr.net/gh/dler-io/Rules@main/Clash/Provider/Google%20FCM.yaml"
+    path: ./rule_providers/google_fcm.yaml
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  Microsoft:
+    type: http
+    behavior: domain
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/microsoft.mrs"
+    path: ./rule_providers/microsoft.mrs
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  Apple:
+    type: http
+    behavior: domain
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/apple.mrs"
+    path: ./rule_providers/apple.mrs
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  Bilibili:
+    type: http
+    behavior: domain
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bilibili.mrs"
+    path: ./rule_providers/bilibili.mrs
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  Bahamut:
+    type: http
+    behavior: domain
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/bahamut.mrs"
+    path: ./rule_providers/bahamut.mrs
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  TikTok:
+    type: http
+    behavior: domain
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs"
+    path: ./rule_providers/tiktok.mrs
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  Disney:
+    type: http
+    behavior: classical
+    url: "https://testingcf.jsdelivr.net/gh/dler-io/Rules@main/Clash/Provider/Media/Disney%20Plus.yaml"
+    path: ./rule_providers/disney.yaml
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  Max:
+    type: http
+    behavior: classical
+    url: "https://testingcf.jsdelivr.net/gh/dler-io/Rules@main/Clash/Provider/Media/Max.yaml"
+    path: ./rule_providers/max.yaml
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  PayPal:
+    type: http
+    behavior: classical
+    url: "https://testingcf.jsdelivr.net/gh/dler-io/Rules@main/Clash/Provider/PayPal.yaml"
+    path: ./rule_providers/paypal.yaml
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  Steam:
+    type: http
+    behavior: classical
+    url: "https://testingcf.jsdelivr.net/gh/dler-io/Rules@main/Clash/Provider/Steam.yaml"
+    path: ./rule_providers/steam.yaml
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  CN:
+    type: http
+    behavior: domain
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"
+    path: ./rule_providers/cn.mrs
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  CN_IP:
+    type: http
+    behavior: ipcidr
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"
+    path: ./rule_providers/cn_ip.mrs
+    interval: 86400
+    proxy: 🔧 规则下载
+
+  Proxy:
+    type: http
+    behavior: domain
+    format: mrs
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/proxy.mrs"
+    path: ./rule_providers/proxy.mrs
+    interval: 86400
+    proxy: 🔧 规则下载
+
+rules:
+  - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+  - IP-CIDR,100.64.0.0/10,DIRECT,no-resolve
+
+  - RULE-SET,AdBlock,🚫 广告拦截
+
+  - DOMAIN-SUFFIX,claude.ai,🤖 AI服务
+  - DOMAIN-SUFFIX,anthropic.com,🤖 AI服务
+  - DOMAIN-SUFFIX,perplexity.ai,🤖 AI服务
+  - DOMAIN,gemini.google.com,🤖 AI服务
+  - RULE-SET,AI,🤖 AI服务
+
+  - RULE-SET,YouTube,📹 YouTube
+  - RULE-SET,Netflix,🌍 国外媒体
+  - RULE-SET,Disney,🌍 国外媒体
+  - RULE-SET,Max,🌍 国外媒体
+  - RULE-SET,Spotify,🌍 国外媒体
+  - RULE-SET,Bahamut,🌍 国外媒体
+  - RULE-SET,Bilibili,🎯 国内流量
+
+  - RULE-SET,Telegram,✈️ Telegram
+  - RULE-SET,GoogleFCM,📧 Google FCM
+  - RULE-SET,Google,🔍 谷歌服务
+
+  - RULE-SET,Microsoft,Ⓜ️ Microsoft
+  - RULE-SET,Apple,🍎 Apple服务
+
+  - RULE-SET,PayPal,💳 PayPal
+  - RULE-SET,Steam,🎮 Steam
+  - RULE-SET,TikTok,🌐 国际流量
+
+  - DOMAIN-SUFFIX,wechat.com,🫧 WeChat
+  - DOMAIN-SUFFIX,weixin.qq.com,🫧 WeChat
+
+  - RULE-SET,CN,🎯 国内流量
+  - RULE-SET,CN_IP,🎯 国内流量,no-resolve
+
+  - RULE-SET,Proxy,🌐 国际流量
+  - MATCH,🌐 国际流量
