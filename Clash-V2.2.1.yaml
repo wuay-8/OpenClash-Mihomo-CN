@@ -6,7 +6,7 @@
 #   - 规则系统完全不变
 #   - 修复 US 匹配 Australia 的误判
 #   - 修复英国组混入 Traffic: ... GB 提示节点
-#   - 所有地区组统一排除流量 / 到期 / 套餐提示节点
+#   - 从节点提供者及所有地区组排除流量 / 到期 / 套餐提示节点
 #   - 国家缩写使用边界匹配，减少误判
 # ============================================================
 
@@ -93,7 +93,7 @@ proxy-providers:
     path: ./proxy_providers/Airport.yaml
     interval: 21600
     proxy: DIRECT
-    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+    exclude-filter: (?i)流量|剩余|已用|用量|总量|额度|套餐|到期|过期|有效期|截止|重置|官网|Traffic|Bandwidth|Quota|Remaining|Expire|Expiry|Expired|Reset|Subscription|(?:\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB)\s*/\s*\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB))|(?:\d{4}[-/.]\d{1,2}[-/.]\d{1,2})
     health-check:
       enable: true
       url: https://www.gstatic.com/generate_204
@@ -131,60 +131,60 @@ proxy-groups:
     use:
       - Airport
     filter: (?i)香港|港|Hong.?Kong|\bHK\b
-    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+    exclude-filter: (?i)流量|剩余|已用|用量|总量|额度|套餐|到期|过期|有效期|截止|重置|官网|Traffic|Bandwidth|Quota|Remaining|Expire|Expiry|Expired|Reset|Subscription|(?:\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB)\s*/\s*\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB))|(?:\d{4}[-/.]\d{1,2}[-/.]\d{1,2})
   - name: Japan
     type: select
     use:
       - Airport
     filter: (?i)日本|日|Japan|Tokyo|Osaka|\bJP\b
-    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+    exclude-filter: (?i)流量|剩余|已用|用量|总量|额度|套餐|到期|过期|有效期|截止|重置|官网|Traffic|Bandwidth|Quota|Remaining|Expire|Expiry|Expired|Reset|Subscription|(?:\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB)\s*/\s*\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB))|(?:\d{4}[-/.]\d{1,2}[-/.]\d{1,2})
   - name: United States
     type: select
     use:
       - Airport
     filter: (?i)美国|美|United.?States|Los.?Angeles|San.?Jose|\bUS\b|\bUSA\b
-    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+    exclude-filter: (?i)流量|剩余|已用|用量|总量|额度|套餐|到期|过期|有效期|截止|重置|官网|Traffic|Bandwidth|Quota|Remaining|Expire|Expiry|Expired|Reset|Subscription|(?:\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB)\s*/\s*\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB))|(?:\d{4}[-/.]\d{1,2}[-/.]\d{1,2})
   - name: Singapore
     type: select
     use:
       - Airport
     filter: (?i)新加坡|Singapore|\bSG\b
-    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+    exclude-filter: (?i)流量|剩余|已用|用量|总量|额度|套餐|到期|过期|有效期|截止|重置|官网|Traffic|Bandwidth|Quota|Remaining|Expire|Expiry|Expired|Reset|Subscription|(?:\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB)\s*/\s*\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB))|(?:\d{4}[-/.]\d{1,2}[-/.]\d{1,2})
   - name: Taiwan
     type: select
     use:
       - Airport
     filter: (?i)台湾|臺灣|台|Taiwan|\bTW\b
-    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+    exclude-filter: (?i)流量|剩余|已用|用量|总量|额度|套餐|到期|过期|有效期|截止|重置|官网|Traffic|Bandwidth|Quota|Remaining|Expire|Expiry|Expired|Reset|Subscription|(?:\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB)\s*/\s*\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB))|(?:\d{4}[-/.]\d{1,2}[-/.]\d{1,2})
   - name: Korea
     type: select
     use:
       - Airport
     filter: (?i)韩国|韓國|韩|Korea|Seoul|\bKR\b
-    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+    exclude-filter: (?i)流量|剩余|已用|用量|总量|额度|套餐|到期|过期|有效期|截止|重置|官网|Traffic|Bandwidth|Quota|Remaining|Expire|Expiry|Expired|Reset|Subscription|(?:\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB)\s*/\s*\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB))|(?:\d{4}[-/.]\d{1,2}[-/.]\d{1,2})
   - name: United Kingdom
     type: select
     use:
       - Airport
     filter: (?i)英国|英|United.?Kingdom|London|\bUK\b|\bGB\b
-    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+    exclude-filter: (?i)流量|剩余|已用|用量|总量|额度|套餐|到期|过期|有效期|截止|重置|官网|Traffic|Bandwidth|Quota|Remaining|Expire|Expiry|Expired|Reset|Subscription|(?:\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB)\s*/\s*\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB))|(?:\d{4}[-/.]\d{1,2}[-/.]\d{1,2})
   - name: Germany
     type: select
     use:
       - Airport
     filter: (?i)德国|德|Germany|Frankfurt|\bDE\b
-    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+    exclude-filter: (?i)流量|剩余|已用|用量|总量|额度|套餐|到期|过期|有效期|截止|重置|官网|Traffic|Bandwidth|Quota|Remaining|Expire|Expiry|Expired|Reset|Subscription|(?:\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB)\s*/\s*\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB))|(?:\d{4}[-/.]\d{1,2}[-/.]\d{1,2})
   - name: France
     type: select
     use:
       - Airport
     filter: (?i)法国|法|France|Paris|\bFR\b
-    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+    exclude-filter: (?i)流量|剩余|已用|用量|总量|额度|套餐|到期|过期|有效期|截止|重置|官网|Traffic|Bandwidth|Quota|Remaining|Expire|Expiry|Expired|Reset|Subscription|(?:\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB)\s*/\s*\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB))|(?:\d{4}[-/.]\d{1,2}[-/.]\d{1,2})
   - name: Other Regions
     type: select
     use:
       - Airport
-    exclude-filter: (?i)香港|Hong.?Kong|\bHK\b|日本|Japan|Tokyo|Osaka|\bJP\b|美国|United.?States|Los.?Angeles|San.?Jose|\bUS\b|\bUSA\b|新加坡|Singapore|\bSG\b|台湾|臺灣|Taiwan|\bTW\b|韩国|韓國|Korea|Seoul|\bKR\b|英国|United.?Kingdom|London|\bUK\b|\bGB\b|德国|Germany|Frankfurt|\bDE\b|法国|France|Paris|\bFR\b|流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+    exclude-filter: (?i)香港|Hong.?Kong|\bHK\b|日本|Japan|Tokyo|Osaka|\bJP\b|美国|United.?States|Los.?Angeles|San.?Jose|\bUS\b|\bUSA\b|新加坡|Singapore|\bSG\b|台湾|臺灣|Taiwan|\bTW\b|韩国|韓國|Korea|Seoul|\bKR\b|英国|United.?Kingdom|London|\bUK\b|\bGB\b|德国|Germany|Frankfurt|\bDE\b|法国|France|Paris|\bFR\b|流量|剩余|已用|用量|总量|额度|套餐|到期|过期|有效期|截止|重置|官网|Traffic|Bandwidth|Quota|Remaining|Expire|Expiry|Expired|Reset|Subscription|(?:\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB)\s*/\s*\d+(?:\.\d+)?\s*(?:KB|MB|GB|TB))|(?:\d{4}[-/.]\d{1,2}[-/.]\d{1,2})
   - name: 国际流量
     type: select
     proxies:
