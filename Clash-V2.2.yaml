@@ -1,13 +1,13 @@
 # ============================================================
-# OpenClash + Mihomo 中国大陆融合版 V2.2
+# OpenClash + Mihomo 中国大陆融合版 V2.2.1
 # Stash / 塔台兼容规则版（无自动测速分组）
 #
-# 相比 V2.1：
-#   - 保留 27 个手动策略组
-#   - 保留 Airport provider
-#   - 移除所有 MRS rule-provider
-#   - OpenAI / YouTube / Netflix / Google / CN 等改为普通 YAML 规则
-#   - 优先使用 jsDelivr CDN，便于中国大陆环境下载
+# 相比 V2.2：
+#   - 规则系统完全不变
+#   - 修复 US 匹配 Australia 的误判
+#   - 修复英国组混入 Traffic: ... GB 提示节点
+#   - 所有地区组统一排除流量 / 到期 / 套餐提示节点
+#   - 国家缩写使用边界匹配，减少误判
 # ============================================================
 
 mixed-port: 7890
@@ -130,52 +130,61 @@ proxy-groups:
     type: select
     use:
       - Airport
-    filter: (?i)香港|港|HK|Hong.?Kong
+    filter: (?i)香港|港|Hong.?Kong|\bHK\b
+    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
   - name: 🇯🇵 Japan
     type: select
     use:
       - Airport
-    filter: (?i)日本|日|JP|Japan|Tokyo|Osaka
+    filter: (?i)日本|日|Japan|Tokyo|Osaka|\bJP\b
+    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
   - name: 🇺🇸 United States
     type: select
     use:
       - Airport
-    filter: (?i)美国|美|US|USA|United.?States|Los.?Angeles|San.?Jose
+    filter: (?i)美国|美|United.?States|Los.?Angeles|San.?Jose|\bUS\b|\bUSA\b
+    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
   - name: 🇸🇬 Singapore
     type: select
     use:
       - Airport
-    filter: (?i)新加坡|新|SG|Singapore
+    filter: (?i)新加坡|Singapore|\bSG\b
+    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
   - name: 🇹🇼 Taiwan
     type: select
     use:
       - Airport
-    filter: (?i)台湾|臺灣|台|TW|Taiwan
+    filter: (?i)台湾|臺灣|台|Taiwan|\bTW\b
+    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
   - name: 🇰🇷 Korea
     type: select
     use:
       - Airport
-    filter: (?i)韩国|韓國|韩|KR|Korea|Seoul
+    filter: (?i)韩国|韓國|韩|Korea|Seoul|\bKR\b
+    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
   - name: 🇬🇧 United Kingdom
     type: select
     use:
       - Airport
-    filter: (?i)英国|英|UK|GB|United.?Kingdom|London
+    filter: (?i)英国|英|United.?Kingdom|London|\bUK\b|\bGB\b
+    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
   - name: 🇩🇪 Germany
     type: select
     use:
       - Airport
-    filter: (?i)德国|德|DE|Germany|Frankfurt
+    filter: (?i)德国|德|Germany|Frankfurt|\bDE\b
+    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
   - name: 🇫🇷 France
     type: select
     use:
       - Airport
-    filter: (?i)法国|法|FR|France|Paris
+    filter: (?i)法国|法|France|Paris|\bFR\b
+    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
   - name: 🌍 Other Regions
     type: select
     use:
       - Airport
-    exclude-filter: (?i)香港|Hong.?Kong|\bHK\b|日本|Japan|\bJP\b|美国|United.?States|\bUS\b|\bUSA\b|新加坡|Singapore|\bSG\b|台湾|臺灣|Taiwan|\bTW\b|韩国|韓國|Korea|\bKR\b|英国|United.?Kingdom|\bUK\b|\bGB\b|德国|Germany|\bDE\b|法国|France|\bFR\b|流量|剩余|到期|过期|Traffic|Expire
+    exclude-filter: (?i)香港|Hong.?Kong|\bHK\b|日本|Japan|Tokyo|Osaka|\bJP\b|美国|United.?States|Los.?Angeles|San.?Jose|\bUS\b|\bUSA\b|新加坡|Singapore|\bSG\b|台湾|臺灣|Taiwan|\bTW\b|韩国|韓國|Korea|Seoul|\bKR\b|英国|United.?Kingdom|London|\bUK\b|\bGB\b|德国|Germany|Frankfurt|\bDE\b|法国|France|Paris|\bFR\b|流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
   - name: 🌐 国际流量
     type: select
     proxies:
@@ -478,3 +487,4 @@ rules:
   - RULE-SET,CN_IP,🎯 国内流量,no-resolve
   - RULE-SET,Proxy,🌐 国际流量
   - MATCH,🌐 国际流量
+
