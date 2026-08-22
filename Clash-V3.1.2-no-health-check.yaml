@@ -1,0 +1,446 @@
+mixed-port: 7890
+allow-lan: true
+bind-address: '*'
+mode: rule
+log-level: warning
+ipv6: false
+unified-delay: true
+tcp-concurrent: true
+find-process-mode: 'off'
+external-controller: 0.0.0.0:9090
+secret: ''
+profile:
+  store-selected: true
+  store-fake-ip: true
+geo-auto-update: false
+sniffer:
+  enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
+  override-destination: true
+  sniff:
+    HTTP:
+      ports:
+        - 80
+        - 8080-8880
+      override-destination: true
+    TLS:
+      ports:
+        - 443
+        - 8443
+    QUIC:
+      ports:
+        - 443
+        - 8443
+  skip-domain:
+    - +.push.apple.com
+dns:
+  enable: true
+  listen: 0.0.0.0:7874
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  use-hosts: true
+  use-system-hosts: false
+  respect-rules: true
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+  nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  proxy-server-nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  fake-ip-filter:
+    - '*.lan'
+    - '*.local'
+    - +.local
+    - +.home.arpa
+    - localhost.ptlogin2.qq.com
+    - time.*.com
+    - time.*.gov
+    - time.*.edu.cn
+    - time.*.apple.com
+    - ntp.*.com
+    - '*.ntp.org.cn'
+    - +.pool.ntp.org
+    - stun.*.*
+    - stun.*.*.*
+    - +.stun.*.*
+    - +.stun.*.*.*
+    - '*.msftconnecttest.com'
+    - '*.msftncsi.com'
+    - +.srv.nintendo.net
+    - +.stun.playstation.net
+    - xbox.*.microsoft.com
+    - +.push.apple.com
+proxy-providers:
+  Airport:
+    type: http
+    url: https://example.com/YOUR_SUBSCRIPTION_URL
+    path: ./proxy_providers/Airport.yaml
+    interval: 21600
+    proxy: DIRECT
+    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+proxy-groups:
+  - name: 节点选择
+    type: select
+    proxies:
+      - 手动切换
+      - 香港
+      - 日本
+      - 美国
+      - 新加坡
+      - 台湾
+      - 韩国
+      - 其他地区
+      - DIRECT
+  - name: 手动切换
+    type: select
+    use:
+      - Airport
+  - name: 规则下载
+    type: select
+    proxies:
+      - 香港
+      - 日本
+      - 新加坡
+      - 节点选择
+      - 手动切换
+      - DIRECT
+    initial: 香港
+  - name: 香港
+    type: select
+    use:
+      - Airport
+    filter: (?i)香港|Hong.?Kong|\bHK\b
+    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+  - name: 日本
+    type: select
+    use:
+      - Airport
+    filter: (?i)日本|Japan|Tokyo|Osaka|\bJP\b
+    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+  - name: 美国
+    type: select
+    use:
+      - Airport
+    filter: (?i)美国|United.?States|Los.?Angeles|San.?Jose|\bUS\b|\bUSA\b
+    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+  - name: 新加坡
+    type: select
+    use:
+      - Airport
+    filter: (?i)新加坡|Singapore|\bSG\b
+    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+  - name: 台湾
+    type: select
+    use:
+      - Airport
+    filter: (?i)台湾|臺灣|Taiwan|\bTW\b
+    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+  - name: 韩国
+    type: select
+    use:
+      - Airport
+    filter: (?i)韩国|韓國|Korea|Seoul|\bKR\b
+    exclude-filter: (?i)流量|剩余|到期|过期|Traffic|Expire|官网|套餐|重置
+  - name: 其他地区
+    type: select
+    use:
+      - Airport
+    exclude-filter: (?i)香港|Hong.?Kong|\bHK\b|日本|Japan|Tokyo|Osaka|\bJP\b|美国|United.?States|Los.?Angeles|San.?Jose|\bUS\b|\bUSA\b|新加坡|Singapore|\bSG\b|台湾|臺灣|Taiwan|\bTW\b|韩国|韓國|Korea|Seoul|\bKR\b
+  - name: 国际流量
+    type: select
+    proxies:
+      - 节点选择
+      - 手动切换
+      - 香港
+      - 日本
+      - 美国
+      - 新加坡
+      - 台湾
+      - 韩国
+      - 其他地区
+  - name: 国内流量
+    type: select
+    proxies:
+      - DIRECT
+      - 节点选择
+  - name: 广告拦截
+    type: select
+    proxies:
+      - REJECT
+      - DIRECT
+  - name: AI服务
+    type: select
+    proxies:
+      - 美国
+      - 新加坡
+      - 日本
+      - 节点选择
+      - 手动切换
+  - name: YouTube
+    type: select
+    proxies:
+      - 节点选择
+      - 香港
+      - 日本
+      - 美国
+      - 新加坡
+      - 台湾
+  - name: 国外媒体
+    type: select
+    proxies:
+      - 节点选择
+      - 手动切换
+      - 香港
+      - 日本
+      - 美国
+      - 新加坡
+      - 台湾
+      - 韩国
+      - 其他地区
+      - DIRECT
+  - name: Telegram
+    type: select
+    proxies:
+      - 新加坡
+      - 香港
+      - 日本
+      - 美国
+      - 节点选择
+  - name: Google
+    type: select
+    proxies:
+      - 节点选择
+      - 香港
+      - 日本
+      - 美国
+      - 新加坡
+      - 台湾
+  - name: Google FCM
+    type: select
+    proxies:
+      - 节点选择
+      - DIRECT
+      - 香港
+      - 日本
+      - 美国
+      - 新加坡
+  - name: Microsoft
+    type: select
+    proxies:
+      - DIRECT
+      - 节点选择
+      - 香港
+      - 日本
+      - 美国
+      - 新加坡
+  - name: Apple
+    type: select
+    proxies:
+      - DIRECT
+      - 节点选择
+      - 香港
+      - 日本
+      - 美国
+      - 新加坡
+      - 台湾
+  - name: PayPal
+    type: select
+    proxies:
+      - 美国
+      - 节点选择
+      - 香港
+      - 新加坡
+      - DIRECT
+  - name: Steam
+    type: select
+    proxies:
+      - DIRECT
+      - 节点选择
+      - 香港
+      - 日本
+      - 新加坡
+      - 美国
+  - name: WeChat
+    type: select
+    proxies:
+      - DIRECT
+      - 节点选择
+rule-providers:
+  AdBlock:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/dler-io/Rules/main/Clash/Provider/AdBlock.yaml
+    path: ./rule_providers/adblock.yaml
+    interval: 86400
+    proxy: 规则下载
+  AI:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/OpenAI/OpenAI.yaml
+    path: ./rule_providers/openai.yaml
+    interval: 86400
+    proxy: 规则下载
+  YouTube:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/YouTube/YouTube.yaml
+    path: ./rule_providers/youtube.yaml
+    interval: 86400
+    proxy: 规则下载
+  Netflix:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Netflix/Netflix.yaml
+    path: ./rule_providers/netflix.yaml
+    interval: 86400
+    proxy: 规则下载
+  Spotify:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Spotify/Spotify.yaml
+    path: ./rule_providers/spotify.yaml
+    interval: 86400
+    proxy: 规则下载
+  Telegram:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Telegram/Telegram.yaml
+    path: ./rule_providers/telegram.yaml
+    interval: 86400
+    proxy: 规则下载
+  Google:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Google/Google.yaml
+    path: ./rule_providers/google.yaml
+    interval: 86400
+    proxy: 规则下载
+  GoogleFCM:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/dler-io/Rules/main/Clash/Provider/Google%20FCM.yaml
+    path: ./rule_providers/google_fcm.yaml
+    interval: 86400
+    proxy: 规则下载
+  Microsoft:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Microsoft/Microsoft.yaml
+    path: ./rule_providers/microsoft.yaml
+    interval: 86400
+    proxy: 规则下载
+  Apple:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Apple/Apple.yaml
+    path: ./rule_providers/apple.yaml
+    interval: 86400
+    proxy: 规则下载
+  Bilibili:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/BiliBili/BiliBili.yaml
+    path: ./rule_providers/bilibili.yaml
+    interval: 86400
+    proxy: 规则下载
+  Bahamut:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Bahamut/Bahamut.yaml
+    path: ./rule_providers/bahamut.yaml
+    interval: 86400
+    proxy: 规则下载
+  TikTok:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/TikTok/TikTok.yaml
+    path: ./rule_providers/tiktok.yaml
+    interval: 86400
+    proxy: 规则下载
+  Disney:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/dler-io/Rules/main/Clash/Provider/Media/Disney%20Plus.yaml
+    path: ./rule_providers/disney.yaml
+    interval: 86400
+    proxy: 规则下载
+  Max:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/dler-io/Rules/main/Clash/Provider/Media/Max.yaml
+    path: ./rule_providers/max.yaml
+    interval: 86400
+    proxy: 规则下载
+  PayPal:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/dler-io/Rules/main/Clash/Provider/PayPal.yaml
+    path: ./rule_providers/paypal.yaml
+    interval: 86400
+    proxy: 规则下载
+  Steam:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/dler-io/Rules/main/Clash/Provider/Steam.yaml
+    path: ./rule_providers/steam.yaml
+    interval: 86400
+    proxy: 规则下载
+  CN:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/China/China.yaml
+    path: ./rule_providers/china.yaml
+    interval: 86400
+    proxy: 规则下载
+  CN_IP:
+    type: http
+    behavior: ipcidr
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ChinaIPs/ChinaIPs_IP.yaml
+    path: ./rule_providers/china_ips.yaml
+    interval: 86400
+    proxy: 规则下载
+  Proxy:
+    type: http
+    behavior: classical
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Proxy/Proxy.yaml
+    path: ./rule_providers/proxy.yaml
+    interval: 86400
+    proxy: 规则下载
+rules:
+  - IP-CIDR,127.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
+  - IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
+  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+  - IP-CIDR,100.64.0.0/10,DIRECT,no-resolve
+  - RULE-SET,AdBlock,广告拦截
+  - DOMAIN-SUFFIX,claude.ai,AI服务
+  - DOMAIN-SUFFIX,anthropic.com,AI服务
+  - DOMAIN-SUFFIX,perplexity.ai,AI服务
+  - DOMAIN,gemini.google.com,AI服务
+  - RULE-SET,AI,AI服务
+  - RULE-SET,YouTube,YouTube
+  - RULE-SET,Netflix,国外媒体
+  - RULE-SET,Disney,国外媒体
+  - RULE-SET,Max,国外媒体
+  - RULE-SET,Spotify,国外媒体
+  - RULE-SET,Bahamut,国外媒体
+  - RULE-SET,Bilibili,国内流量
+  - RULE-SET,Telegram,Telegram
+  - RULE-SET,GoogleFCM,Google FCM
+  - RULE-SET,Google,Google
+  - RULE-SET,Microsoft,Microsoft
+  - RULE-SET,Apple,Apple
+  - RULE-SET,PayPal,PayPal
+  - RULE-SET,Steam,Steam
+  - RULE-SET,TikTok,国际流量
+  - DOMAIN-SUFFIX,wechat.com,WeChat
+  - DOMAIN-SUFFIX,weixin.qq.com,WeChat
+  - RULE-SET,CN,国内流量
+  - RULE-SET,CN_IP,国内流量,no-resolve
+  - RULE-SET,Proxy,国际流量
+  - MATCH,国际流量
